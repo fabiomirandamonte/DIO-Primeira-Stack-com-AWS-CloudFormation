@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  AWS CloudFormation Template - Primeira Stack para o Bootcamp DIO.
+  Provisiona um Bucket S3 e uma Instancia EC2 basica elegivel para o Free Tier.
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: dev
+    Description: Nome do ambiente de implantacao (ex: dev, staging, prod)
+    AllowedValues:
+      - dev
+      - staging
+      - prod
+
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t3.micro
+    Description: Tipo da instancia EC2 (t2.micro/t3.micro sao elegiveis ao Free Tier)
+
+Resources:
+  # Resource 1: Bucket S3 para Armazenamento
+  MyProjectBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "dio-cloudformation-bucket-${EnvironmentName}-${AWS::AccountId}"
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: ManagedBy
+          Value: CloudFormation
+        - Key: Project
+          Value: DIO-First-Stack
+
+  # Resource 2: Grupo de Seguranca para a Instancia EC2
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Permite acesso HTTP e SSH basico
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-web-sg"
+
+  # Resource 3: Instancia EC2
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+      # Amazon Linux 2023 AMI id padrao em us-east-1 (pode ser ajustado conforme a regiao)
+      ImageId: ami-0230bd607be8e264f
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ec2-instance"
+        - Key: Project
+          Value: DIO-First-Stack
+
+Outputs:
+  BucketNameOutput:
+    Description: Nome do Bucket S3 criado pela Stack
+    Value: !Ref MyProjectBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-S3Bucket"
+
+  EC2InstanceIdOutput:
+    Description: ID da Instancia EC2 criada
+    Value: !Ref MyEC2Instance
+
+  EC2PublicIPOutput:
+    Description: IP Publico da Instancia EC2
+    Value: !GetAtt MyEC2Instance.PublicIp
