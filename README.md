@@ -63,3 +63,40 @@ Resources:
 
 Outputs:
   # Exibe valores de saída após o deploy (ex: IP público da instância, URL do bucket)
+
+```
+
+⚙️ Passo a Passo da Implementação
+
+1.Criação do Template:Escrita do código.
+  Criei o arquivo template.yaml especificando os recursos que precisava provisionar (exemplo: uma instância EC2 ou um Bucket S3).
+
+2.Acesso ao Console AWS:
+  Navegação.Acessei o Console da AWS e naveguei até o serviço CloudFormation.
+
+3.Criação da Stack:
+  Deploy.Selecionei a opção Create Stack > With new resources (standard) e fiz o upload do arquivo template.yaml.
+
+4.Configuração de Parâmetros:
+  Definições.Preenchi os parâmetros necessários (nome da Stack e variáveis de ambiente) e avancei pelas telas de configuração.
+
+5.Verificação de Eventos:
+  Monitoramento.Acompanhei a aba Events até a alteração do status para CREATE_COMPLETE.
+
+6.Exclusão de Recursos:
+  Limpeza de ambiente.Após testar, executei o Delete Stack para remover todos os recursos e evitar custos indesejados.
+
+
+💡 Insights e Aprendizados
+1. Gestão de Dependências Automática: O CloudFormation descobre a ordem correta de criação dos recursos com base nas referências cruzadas (Ref e Fn::GetAtt).
+
+2. Rollback Automático: Caso ocorra algum erro durante o provisionamento de qualquer recurso, o CloudFormation desfaz todas as alterações automaticamente (ROLLBACK_COMPLETE), mantendo o ambiente limpo.
+
+3. Boas Práticas de Custos: Sempre exclua a Stack após a conclusão de testes para não gerar cobranças adicionais na conta AWS.
+
+📁 Estrutura do Repositório
+├── template.yaml      # Arquivo do CloudFormation com a declaração da infraestrutura
+├── README.md          # Documentação do projeto
+└── images/            # Printscreens do processo de criação da Stack
+    ├── stack-creation.png
+    └── stack-complete.png
