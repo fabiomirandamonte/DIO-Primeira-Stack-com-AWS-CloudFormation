@@ -65,6 +65,7 @@ Outputs:
 
 ```
 =====================================================================
+
 ⚙️ Passo a Passo da Implementação
 
   1. Criação do Template:Escrita do código.
@@ -85,6 +86,7 @@ Outputs:
   6. Exclusão de Recursos:
      Limpeza de ambiente.Após testar, executei o Delete Stack para remover todos os recursos e evitar custos indesejados.
 =====================================================================
+
 💡 Insights e Aprendizados
   1. Gestão de Dependências Automática: O CloudFormation descobre a ordem correta de criação dos recursos com base nas referências cruzadas (Ref e Fn::GetAtt).
 
@@ -92,6 +94,7 @@ Outputs:
 
   3. Boas Práticas de Custos: Sempre exclua a Stack após a conclusão de testes para não gerar cobranças adicionais na conta AWS.
 =====================================================================
+
 📁 Estrutura do Repositório
 ├── template.yaml      # Arquivo do CloudFormation com a declaração da infraestrutura
 ├── README.md          # Documentação do projeto
